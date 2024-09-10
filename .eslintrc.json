@@ -1,3 +1,58 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "prettier", "@typescript-eslint", "simple-import-sort"],
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:@next/next/recommended",
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:tailwindcss/recommended",
+    "prettier"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.ts"],
+      "rules": {
+        "import/prefer-default-export": "off"
+      }
+    }
+  ],
+  "rules": {
+    "complexity": ["error", 20],
+    "no-console": "off",
+    "import/no-unresolved": "error",
+    "import/extensions": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "simple-import-sort/imports": "error",
+    "import/no-cycle": "off",
+    "import/newline-after-import": "error",
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
+    "no-nested-ternary": "error",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "@typescript-eslint/no-floating-promises": "off",
+    "tailwindcss/no-custom-classname": "error"
+},
+"settings": {
+    "tailwindcss": {
+      "config": "./tailwind-config.ts"
+    }
+  },
+  "ignorePatterns": ["next.config.js"]
 }
+
