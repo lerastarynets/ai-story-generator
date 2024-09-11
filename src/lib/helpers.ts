@@ -1,0 +1,25 @@
+// Helper function to generate the prompt dynamically
+export const generatePrompt = ({
+  character1,
+  character2,
+  relationship,
+  events,
+}: {
+  character1: string;
+  character2: string;
+  relationship: string;
+  events: string[];
+}) => {
+  let prompt = `Write a story about ${character1} and ${character2}. They have a ${relationship} relationship.`;
+
+  if (events && events.length > 0) {
+    prompt += ' The story should include the following events:\n';
+    events.forEach((event, index) => {
+      prompt += `${index + 1}. ${event}\n`;
+    });
+  } else {
+    prompt += ' The story should include a few exciting and unexpected events.';
+  }
+
+  return prompt;
+};
