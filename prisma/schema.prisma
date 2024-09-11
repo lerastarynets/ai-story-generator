@@ -18,10 +18,14 @@ model User {
   name      String
   email     String   @unique
   createdAt DateTime @default(now())
+
+  @@map("users")
 }
 
 model Story {
   id        Int      @id @default(autoincrement())
   text      String
   createdAt DateTime @default(now())
+
+  @@map("stories")
 }
