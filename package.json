@@ -16,6 +16,7 @@
     "@mui/material-nextjs": "^6.0.2",
     "@prisma/client": "^5.19.1",
     "next": "14.2.9",
+    "openai": "^4.58.2",
     "react": "^18",
     "react-dom": "^18"
   },
