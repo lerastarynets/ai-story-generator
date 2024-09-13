@@ -12,13 +12,17 @@
     "@emotion/cache": "^11.13.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@hookform/resolvers": "^3.9.0",
+    "@mui/icons-material": "^6.1.0",
     "@mui/material": "^6.0.2",
     "@mui/material-nextjs": "^6.0.2",
     "@prisma/client": "^5.19.1",
     "next": "14.2.9",
     "openai": "^4.58.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.53.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",
