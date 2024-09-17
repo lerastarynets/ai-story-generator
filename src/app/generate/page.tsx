@@ -6,6 +6,7 @@ import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/mater
 import { Controller, FieldValues, useFieldArray, useForm } from 'react-hook-form';
 
 import { storySchema } from '../../lib/formSchemas';
+import { toastSuccess } from '../../lib/toastUtils';
 
 const defaultValues = {
   character1: '',
@@ -30,6 +31,7 @@ const Page = () => {
   });
 
   const onSubmit = (data: FieldValues) => {
+    toastSuccess('Form submitted');
     console.log('Form Data:', data);
   };
 

@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '../../lib/constants';
+import { toastError } from '../../lib/toastUtils';
 
 interface Story {
   id: number;
@@ -43,22 +44,19 @@ const Page = () => {
       const response = await fetch(`/api/stories?${params.toString()}`);
 
       if (!response.ok) {
-        throw new Error('Failed to fetch stories');
+        return toastError('Failed to fetch stories');
       }
       const data = await response.json();
       setStories(data.stories);
       setTotalPages(data.total);
     } catch (error) {
-      console.error('Error fetching stories:', error);
-      setStories([]);
-      setTotalPages(DEFAULT_PAGE);
+      toastError(`An unexpected error occured: ${error}`);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    setCurrentPage(currentPage);
     fetchStories(currentPage);
   }, [currentPage]);
 
