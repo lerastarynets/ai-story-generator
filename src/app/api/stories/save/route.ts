@@ -12,8 +12,7 @@ export async function POST(req: NextRequest) {
     await prisma.story.create({ data: { content: body.content, name: body.name } });
 
     return Response.json({ success: true });
-  } catch (error) {
-    console.error(error);
-    return Response.json({ error: 'Something went wrong' }, { status: 500 });
+  } catch (error: any) {
+    return Response.json({ error: error?.message || 'Something went wrong' }, { status: 500 });
   }
 }
