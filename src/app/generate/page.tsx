@@ -2,11 +2,14 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 import { Controller, FieldValues, useFieldArray, useForm } from 'react-hook-form';
 
-import { storySchema } from '../../lib/formSchemas';
-import { toastSuccess } from '../../lib/toastUtils';
+import SaveStoryForm from '../../components/SaveStoryForm';
+import { generateStorySchema } from '../../lib/formSchemas';
+import { toastError, toastSuccess } from '../../lib/toastUtils';
 
 const defaultValues = {
   character1: '',
@@ -19,10 +22,11 @@ const Page = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    reset,
+    formState: { errors, isValid, isSubmitting },
   } = useForm({
     defaultValues,
-    resolver: yupResolver(storySchema),
+    resolver: yupResolver(generateStorySchema),
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -30,9 +34,27 @@ const Page = () => {
     name: 'events',
   });
 
-  const onSubmit = (data: FieldValues) => {
-    toastSuccess('Form submitted');
-    console.log('Form Data:', data);
+  const [generatedStory, setGeneratedStory] = useState<string | null>(null);
+
+  const handleGenerate = async (formData: FieldValues) => {
+    try {
+      const response = await fetch('/api/stories/generate', {
+        method: 'POST',
+        body: JSON.stringify({ ...formData }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        return toastError(`Failed to generate story: ${data.error}`);
+      }
+
+      setGeneratedStory(data.story);
+      reset();
+      toastSuccess('Story generated successfully!');
+    } catch (error) {
+      toastError(`An unexpected error occured: ${error}`);
+    }
   };
 
   return (
@@ -40,7 +62,7 @@ const Page = () => {
       <Typography align='center' variant='h4'>
         Generate A Story
       </Typography>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(handleGenerate)} noValidate>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Controller
@@ -139,12 +161,21 @@ const Page = () => {
           </Grid>
 
           <Grid item xs={12}>
-            <Button disabled={!isValid} color='secondary' type='submit' variant='contained' fullWidth>
+            <LoadingButton
+              loading={isSubmitting}
+              disabled={!isValid}
+              color='secondary'
+              type='submit'
+              variant='contained'
+              fullWidth
+            >
               Generate Story
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </form>
+
+      {generatedStory && <SaveStoryForm generatedStory={generatedStory} />}
     </Box>
   );
 };
