@@ -5,7 +5,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 export const generateStory = async (prompt: string) => {
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
-    temperature: 0.5,
+    temperature: 0.3,
     messages: [
       {
         role: 'system',
