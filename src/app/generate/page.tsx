@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, FieldValues, useFieldArray, useForm } from 'react-hook-form';
 
 import SaveStoryForm from '../../components/SaveStoryForm';
@@ -35,6 +35,13 @@ const Page = () => {
   });
 
   const [generatedStory, setGeneratedStory] = useState<string | null>(null);
+  const saveFormRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (generatedStory && saveFormRef.current) {
+      saveFormRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [generatedStory]);
 
   const handleGenerate = async (formData: FieldValues) => {
     try {
@@ -175,7 +182,11 @@ const Page = () => {
         </Grid>
       </form>
 
-      {generatedStory && <SaveStoryForm generatedStory={generatedStory} />}
+      {generatedStory && (
+        <Box ref={saveFormRef}>
+          <SaveStoryForm generatedStory={generatedStory} />
+        </Box>
+      )}
     </Box>
   );
 };
