@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   name      String
   email     String   @unique
   createdAt DateTime @default(now())
@@ -23,7 +23,7 @@ model User {
 }
 
 model Story {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   name      String
   content   String
   createdAt DateTime @default(now())
