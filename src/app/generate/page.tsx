@@ -69,7 +69,7 @@ const Page = () => {
       <Typography align='center' variant='h4'>
         Generate A Story
       </Typography>
-      <form onSubmit={handleSubmit(handleGenerate)} noValidate>
+      <form onSubmit={handleSubmit(handleGenerate)}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Controller

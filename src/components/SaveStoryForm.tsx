@@ -74,14 +74,7 @@ const SaveStoryForm = ({ generatedStory }: IGeneratedStoryFormProps) => {
           )}
         />
         <Box className='flex space-x-2'>
-          <LoadingButton
-            type='submit'
-            loading={isSubmitting}
-            variant='contained'
-            color='secondary'
-            onClick={handleSave}
-            disabled={!isValid}
-          >
+          <LoadingButton type='submit' loading={isSubmitting} variant='contained' color='secondary' disabled={!isValid}>
             {isSubmitting ? 'Saving...' : 'Save Story'}
           </LoadingButton>
           <Button variant='outlined' color='error' onClick={handleDiscard}>
