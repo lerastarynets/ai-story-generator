@@ -184,7 +184,7 @@ const Page = () => {
 
       {generatedStory && (
         <Box ref={saveFormRef}>
-          <SaveStoryForm generatedStory={generatedStory} />
+          <SaveStoryForm setGeneratedStory={setGeneratedStory} generatedStory={generatedStory} />
         </Box>
       )}
     </Box>

@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Button, TextField, Typography } from '@mui/material';
+import { Dispatch, SetStateAction } from 'react';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
 
 import { saveStorySchema } from '../lib/formSchemas';
@@ -8,9 +9,10 @@ import { toastError, toastSuccess } from '../lib/toastUtils';
 
 interface IGeneratedStoryFormProps {
   generatedStory: string;
+  setGeneratedStory: Dispatch<SetStateAction<string | null>>;
 }
 
-const SaveStoryForm = ({ generatedStory }: IGeneratedStoryFormProps) => {
+const SaveStoryForm = ({ generatedStory, setGeneratedStory }: IGeneratedStoryFormProps) => {
   const {
     control,
     handleSubmit,
@@ -33,6 +35,7 @@ const SaveStoryForm = ({ generatedStory }: IGeneratedStoryFormProps) => {
         return toastError('Failed to save story');
       }
 
+      setGeneratedStory(null);
       toastSuccess('Story saved successfully!');
     } catch (error) {
       toastError(`An unexpected error occured: ${error}`);
