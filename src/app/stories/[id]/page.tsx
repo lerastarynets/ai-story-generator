@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { getStoryById } from '../../../server-actions/stories';
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  const story = await getStoryById(params.id);
+  const { data: story } = await getStoryById(params.id);
 
   if (!story) {
     notFound();
