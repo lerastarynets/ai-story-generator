@@ -19,34 +19,25 @@ import { useEffect, useState } from 'react';
 
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '../../lib/constants';
 import { toastError } from '../../lib/toastUtils';
-
-interface Story {
-  id: number;
-  name: string;
-  createdAt: string;
-}
+import { getStories } from '../../server-actions/stories';
+import { IStory } from '../../types/stories';
 
 const Page = () => {
   const router = useRouter();
-  const [stories, setStories] = useState<Story[]>([]);
-  const [totalPages, setTotalPages] = useState(DEFAULT_PAGE);
+  const [stories, setStories] = useState<IStory[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchStories = async (page: number) => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        perPage: DEFAULT_PER_PAGE.toString(),
-      });
+      const { data, error } = await getStories(page, DEFAULT_PAGE);
 
-      const response = await fetch(`/api/stories?${params.toString()}`);
-
-      if (!response.ok) {
-        return toastError('Failed to fetch stories');
+      if (!data) {
+        return toastError(error);
       }
-      const data = await response.json();
+
       setStories(data.stories);
       setTotalPages(data.total);
     } catch (error) {
@@ -64,7 +55,7 @@ const Page = () => {
     setCurrentPage(page);
   };
 
-  const handleView = (id: number) => {
+  const handleView = (id: string) => {
     router.push(`stories/${id}`);
   };
 
