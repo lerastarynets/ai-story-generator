@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ToastContainer, ToastContainerProps } from 'react-toastify';
 
+import Navbar from '../components/Navbar';
 import theme from '../lib/theme';
 
 const defaultToastOptions: ToastContainerProps = {
@@ -29,6 +30,7 @@ export default function RootLayout({
             <>
               <CssBaseline />
               <ToastContainer {...defaultToastOptions} />
+              <Navbar />
               {children}
             </>
           </ThemeProvider>
