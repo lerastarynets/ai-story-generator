@@ -3,6 +3,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -95,7 +96,7 @@ const Page = () => {
             {isLoading && (
               <TableRow>
                 <TableCell colSpan={3} align='center'>
-                  Loading...
+                  <CircularProgress color='secondary' />
                 </TableCell>
               </TableRow>
             )}
