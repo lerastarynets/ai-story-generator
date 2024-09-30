@@ -32,7 +32,7 @@ const Page = () => {
   const fetchStories = async (page: number) => {
     setIsLoading(true);
     try {
-      const { data, error } = await getStories(page, DEFAULT_PAGE);
+      const { data, error } = await getStories(page, DEFAULT_PER_PAGE);
 
       if (!data) {
         return toastError(error);

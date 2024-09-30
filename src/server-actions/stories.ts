@@ -4,12 +4,13 @@ import prisma from '../lib/prisma';
 
 export async function getStories(page: number, perPage: number) {
   try {
-    const stories = await prisma.story.findMany({
-      skip: page * perPage,
-      take: perPage,
-    });
-
-    const storiesCount = await prisma.story.count();
+    const [stories, storiesCount] = await Promise.all([
+      prisma.story.findMany({
+        skip: page * perPage,
+        take: perPage,
+      }),
+      prisma.story.count(),
+    ]);
 
     return {
       success: true,
