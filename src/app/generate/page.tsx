@@ -3,7 +3,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useEffect, useRef, useState } from 'react';
 import { Controller, FieldValues, useFieldArray, useForm } from 'react-hook-form';
 
@@ -71,7 +72,7 @@ const Page = () => {
       </Typography>
       <form onSubmit={handleSubmit(handleGenerate)}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Controller
               name='character1'
               control={control}
@@ -89,7 +90,7 @@ const Page = () => {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Controller
               name='character2'
               control={control}
@@ -107,7 +108,7 @@ const Page = () => {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Controller
               name='relationship'
               control={control}
@@ -125,13 +126,13 @@ const Page = () => {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Typography variant='h6'>Events</Typography>
           </Grid>
 
           {fields.map((item, index) => (
-            <Grid container item xs={12} spacing={1} key={item.id} alignItems='center'>
-              <Grid item xs={10}>
+            <Grid container size={{ xs: 12 }} spacing={1} key={item.id} alignItems='center'>
+              <Grid size={{ xs: 10 }}>
                 <Controller
                   name={`events.${index}.event`}
                   control={control}
@@ -148,7 +149,7 @@ const Page = () => {
                   )}
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid size={{ xs: 2 }}>
                 <IconButton color='error' onClick={() => remove(index)} disabled={fields.length === 1}>
                   <RemoveCircle />
                 </IconButton>
@@ -156,7 +157,7 @@ const Page = () => {
             </Grid>
           ))}
 
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Button color='secondary' variant='contained' startIcon={<AddCircle />} onClick={() => append({ event: '' })}>
               Add Event
             </Button>
@@ -167,7 +168,7 @@ const Page = () => {
             )}
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <LoadingButton
               loading={isSubmitting}
               disabled={!isValid}
