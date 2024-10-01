@@ -41,26 +41,18 @@ const Navbar = () => {
     <AppBar position='static' color='secondary'>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <AdbIcon className='xs:hidden mr-2 md:flex' />
           <Typography
             variant='h6'
             noWrap
             component='a'
             href='#'
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+            className='xs:hidden mr-4 font-bold text-inherit no-underline md:flex'
           >
             LOGO
           </Typography>
 
-          <Box className='grow' sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box className='xs:flex grow md:hidden'>
             <IconButton
               size='large'
               aria-label='account of current user'
@@ -85,7 +77,7 @@ const Navbar = () => {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              className='xs:block grow md:hidden'
             >
               {NAVBAR_PAGES.map(({ name, path }) => (
                 <MenuItem key={name}>
@@ -96,26 +88,17 @@ const Navbar = () => {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <AdbIcon className='xs:flex mr-2 md:hidden' />
           <Typography
             variant='h5'
             noWrap
             component='a'
             href='#app-bar-with-responsive-menu'
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+            className='xs:flex mr-4 grow font-bold text-inherit no-underline md:hidden'
           >
             LOGO
           </Typography>
-          <Box className='grow' sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box className='xs:hidden grow md:flex'>
             {NAVBAR_PAGES.map(({ name, path }) => (
               <Link className='no-underline' href={path} key={name}>
                 <Button className='my-4 block text-white'>{name}</Button>
@@ -125,11 +108,11 @@ const Navbar = () => {
           <Box className='grow-0'>
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} className='p-0'>
-                <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+                <Avatar alt='Remy Sharp' />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              className='mt-11'
               id='menu-appbar'
               anchorEl={anchorElUser}
               anchorOrigin={{
