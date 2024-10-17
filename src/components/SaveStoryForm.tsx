@@ -7,16 +7,15 @@ import { Controller, FieldValues, useForm } from 'react-hook-form';
 import { saveStorySchema } from '../lib/formSchemas';
 import { toastError, toastSuccess } from '../lib/toastUtils';
 
-interface IGeneratedStoryFormProps {
+interface ISaveStoryFormProps {
   generatedStory: string;
   setGeneratedStory: Dispatch<SetStateAction<string | null>>;
 }
 
-const SaveStoryForm = ({ generatedStory, setGeneratedStory }: IGeneratedStoryFormProps) => {
+const SaveStoryForm = ({ generatedStory, setGeneratedStory }: ISaveStoryFormProps) => {
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     defaultValues: { name: '', content: generatedStory },
@@ -43,12 +42,12 @@ const SaveStoryForm = ({ generatedStory, setGeneratedStory }: IGeneratedStoryFor
   };
 
   const handleDiscard = () => {
-    reset();
+    setGeneratedStory(null);
     toastSuccess('Story discarded');
   };
 
   return (
-    <Box className='mt-8 space-y-3'>
+    <Box className='space-y-3'>
       <Typography variant='h5'>Generated Story</Typography>
       <Box className='rounded bg-gray-100 p-4'>
         <Typography variant='body1'>
@@ -60,7 +59,7 @@ const SaveStoryForm = ({ generatedStory, setGeneratedStory }: IGeneratedStoryFor
           ))}
         </Typography>
       </Box>
-      <form className='space-y-2' onSubmit={handleSubmit(handleSave)}>
+      <form className='w-full space-y-2' onSubmit={handleSubmit(handleSave)}>
         <Controller
           name='name'
           control={control}
