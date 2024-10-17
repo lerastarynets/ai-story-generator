@@ -61,7 +61,7 @@ const Page = () => {
   };
 
   return (
-    <Box className='space-y-4 p-4'>
+    <Box className='space-y-4'>
       <Typography variant='h4' align='center'>
         My Stories
       </Typography>

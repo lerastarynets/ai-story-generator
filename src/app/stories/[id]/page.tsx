@@ -11,7 +11,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <Box className='space-y-4 p-8'>
+    <Box className='space-y-4'>
       <Typography align='center' variant='h4'>
         {story.name}
       </Typography>
