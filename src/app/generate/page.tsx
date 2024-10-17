@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import GenerateStoryForm from '../../components/GenerateStoryForm';
-import SaveStoryForm from '../../components/SaveStoryForm';
+import GenerateStoryForm from '@/components/GenerateStoryForm';
+import SaveStoryForm from '@/components/SaveStoryForm';
 
 const Page = () => {
   const [generatedStory, setGeneratedStory] = useState<string | null>(null);

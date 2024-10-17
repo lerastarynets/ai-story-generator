@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
-import { saveStorySchema } from '../../../../lib/formSchemas';
-import prisma from '../../../../lib/prisma';
+import { saveStorySchema } from '@/lib/formSchemas';
+import prisma from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   try {

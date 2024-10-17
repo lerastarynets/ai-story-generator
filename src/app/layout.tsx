@@ -1,4 +1,4 @@
-import './globals.css';
+import '@/app/globals.css';
 import 'react-toastify/ReactToastify.css';
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -6,8 +6,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ToastContainer, ToastContainerProps } from 'react-toastify';
 
-import Navbar from '../components/Navbar';
-import theme from '../lib/theme';
+import Navbar from '@/components/Navbar';
+import theme from '@/lib/theme';
 
 const defaultToastOptions: ToastContainerProps = {
   position: 'bottom-right',

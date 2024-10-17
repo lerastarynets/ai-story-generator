@@ -18,10 +18,10 @@ import {
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '../../lib/constants';
-import { toastError } from '../../lib/toastUtils';
-import { getStories } from '../../server-actions/stories';
-import { IStory } from '../../types/stories';
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '@/lib/constants';
+import { toastError } from '@/lib/toastUtils';
+import { getStories } from '@/server-actions/stories';
+import { IStory } from '@/types/stories';
 
 const Page = () => {
   const router = useRouter();

@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { MouseEvent, useState } from 'react';
 
-import { NAVBAR_PAGES, NAVBAR_SETTINGS } from '../lib/constants';
+import { NAVBAR_PAGES, NAVBAR_SETTINGS } from '@/lib/constants';
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);

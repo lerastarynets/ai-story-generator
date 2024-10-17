@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { notFound } from 'next/navigation';
 
-import { getStoryById } from '../../../server-actions/stories';
+import { getStoryById } from '@/server-actions/stories';
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const { data: story } = await getStoryById(params.id);

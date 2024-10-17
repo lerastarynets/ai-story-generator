@@ -6,8 +6,8 @@ import Grid from '@mui/material/Grid2';
 import { Dispatch, SetStateAction } from 'react';
 import { Controller, FieldValues, useFieldArray, useForm } from 'react-hook-form';
 
-import { generateStorySchema } from '../lib/formSchemas';
-import { toastError, toastSuccess } from '../lib/toastUtils';
+import { generateStorySchema } from '@/lib/formSchemas';
+import { toastError, toastSuccess } from '@/lib/toastUtils';
 
 const defaultValues = {
   character1: '',

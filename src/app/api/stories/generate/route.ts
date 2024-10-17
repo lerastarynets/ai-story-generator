@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 
-import { generateStorySchema } from '../../../../lib/formSchemas';
-import { generatePrompt } from '../../../../lib/helpers';
-import { generateStory } from '../../../../lib/openai';
+import { generateStorySchema } from '@/lib/formSchemas';
+import { generatePrompt } from '@/lib/helpers';
+import { generateStory } from '@/lib/openai';
 
 export async function POST(req: NextRequest) {
   try {

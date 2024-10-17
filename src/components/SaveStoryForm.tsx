@@ -4,8 +4,8 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
 
-import { saveStorySchema } from '../lib/formSchemas';
-import { toastError, toastSuccess } from '../lib/toastUtils';
+import { saveStorySchema } from '@/lib/formSchemas';
+import { toastError, toastSuccess } from '@/lib/toastUtils';
 
 interface ISaveStoryFormProps {
   generatedStory: string;
