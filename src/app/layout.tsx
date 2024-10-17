@@ -31,7 +31,9 @@ export default function RootLayout({
               <CssBaseline />
               <ToastContainer {...defaultToastOptions} />
               <Navbar />
-              {children}
+              <main className='flex flex-col items-center pt-24'>
+                <div className='max-w-[600px] px-4'>{children}</div>
+              </main>
             </>
           </ThemeProvider>
         </AppRouterCacheProvider>
