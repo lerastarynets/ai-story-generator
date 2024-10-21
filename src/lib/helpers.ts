@@ -1,4 +1,6 @@
-// Helper function to generate the prompt dynamically
+import { compare, genSalt, hash } from 'bcrypt';
+
+// Helper function to generate the OpenAI prompt dynamically
 export const generatePrompt = ({
   character1,
   character2,
@@ -18,4 +20,19 @@ export const generatePrompt = ({
   });
 
   return prompt;
+};
+
+export const hashPassword = async (password: string) => {
+  const saltRounds = parseInt(process.env.SALT_ROUNDS || '10', 10);
+
+  const customSalt = await genSalt(saltRounds);
+
+  const hashedPassword = await hash(password, customSalt);
+
+  return hashedPassword;
+};
+
+export const verifyPassword = async (plainPassword: string, hashedPassword: string) => {
+  const isMatch = await compare(plainPassword, hashedPassword);
+  return isMatch;
 };
