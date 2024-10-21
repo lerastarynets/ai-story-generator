@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { TSaveStoryData } from '@/types/stories';
 
 export async function getStories(page: number, perPage: number) {
   try {
@@ -33,5 +34,15 @@ export async function getStoryById(id: string) {
     return { success: true, data: story };
   } catch (error: any) {
     return { success: false, error: error.message || 'Server error' };
+  }
+}
+
+export async function saveStory(data: TSaveStoryData) {
+  try {
+    await prisma.story.create({ data });
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Failed to save story' };
   }
 }

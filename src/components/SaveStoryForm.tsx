@@ -2,10 +2,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
-import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import { saveStorySchema } from '@/lib/formSchemas';
 import { toastError, toastSuccess } from '@/lib/toastUtils';
+import { saveStory } from '@/server-actions/stories';
+import { TSaveStoryData } from '@/types/stories';
 
 interface ISaveStoryFormProps {
   generatedStory: string;
@@ -22,16 +24,12 @@ const SaveStoryForm = ({ generatedStory, setGeneratedStory }: ISaveStoryFormProp
     resolver: yupResolver(saveStorySchema),
   });
 
-  const handleSave = async (formData: FieldValues) => {
-    console.log(formData);
+  const handleSave = async (formData: TSaveStoryData) => {
     try {
-      const response = await fetch('/api/stories/save', {
-        method: 'POST',
-        body: JSON.stringify({ ...formData }),
-      });
+      const response = await saveStory(formData);
 
-      if (!response.ok) {
-        return toastError('Failed to save story');
+      if (!response.success) {
+        return toastError(response.error);
       }
 
       setGeneratedStory(null);
