@@ -26,11 +26,11 @@ const Page = () => {
 
   const handleLogin = async (formData: TLogInData) => {
     try {
-      await logIn(formData);
+      const response = await logIn(formData);
 
-      //   if (!response.success) {
-      //     return toastError(response.error);
-      //   }
+      if (response?.error) {
+        return toastError(response.error);
+      }
 
       toastSuccess('Login successful!');
     } catch (error) {
