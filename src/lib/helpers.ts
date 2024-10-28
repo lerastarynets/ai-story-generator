@@ -1,4 +1,4 @@
-import { compare, genSalt, hash } from 'bcrypt';
+import { compare, genSalt, hash } from 'bcryptjs';
 
 // Helper function to generate the OpenAI prompt dynamically
 export const generatePrompt = ({
