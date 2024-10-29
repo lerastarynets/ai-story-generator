@@ -21,6 +21,7 @@ export async function logIn(data: TLogInData) {
           return { success: false, error: 'Authentication error' };
       }
     }
+
     if (isRedirectError(error)) {
       throw error;
     }
@@ -42,5 +43,21 @@ export async function logOut() {
 }
 
 export async function signUp(data: TSignUpData) {
-  console.log(data);
+  try {
+    const { password, email, name } = data;
+
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+
+    if (existingUser) {
+      return { success: false, error: 'Email is already in use' };
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    await prisma.user.create({ data: { email, name, password: hashedPassword } });
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Server error' };
+  }
 }

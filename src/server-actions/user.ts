@@ -13,3 +13,15 @@ export async function getUserByEmail(email: string) {
     return { success: false, error: error.message || 'Server error' };
   }
 }
+
+export async function getUserById(id: string) {
+  try {
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      return { success: false, error: 'User not found' };
+    }
+    return { success: true, data: user };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Server error' };
+  }
+}
