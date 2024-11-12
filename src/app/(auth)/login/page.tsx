@@ -6,6 +6,7 @@ import { Box, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 
+import SocialMediaButtons from '@/components/SocialMediaButtons';
 import { logInSchema } from '@/lib/formSchemas';
 import { toastError, toastSuccess } from '@/lib/toastUtils';
 import { logIn } from '@/server-actions/auth';
@@ -77,6 +78,9 @@ const Page = () => {
           Log In
         </LoadingButton>
       </form>
+
+      <SocialMediaButtons />
+
       <Typography variant='body2'>
         Don’t have an account? <Link href='/signup'>Sign up</Link>
       </Typography>

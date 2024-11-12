@@ -6,6 +6,7 @@ import { Box, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 
+import SocialMediaButtons from '@/components/SocialMediaButtons';
 import { signUpSchema } from '@/lib/formSchemas';
 import { toastError, toastSuccess } from '@/lib/toastUtils';
 import { signUp } from '@/server-actions/auth';
@@ -104,6 +105,9 @@ const SignupForm = () => {
             />
           )}
         />
+
+        <SocialMediaButtons />
+
         <LoadingButton type='submit' loading={isSubmitting} variant='contained' color='secondary' disabled={!isValid}>
           Sign Up
         </LoadingButton>
