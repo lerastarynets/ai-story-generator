@@ -5,3 +5,5 @@ import { logInSchema, signUpSchema } from '@/lib/formSchemas';
 export type TLogInData = yup.InferType<typeof logInSchema>;
 
 export type TSignUpData = yup.InferType<typeof signUpSchema>;
+
+export type TAuthProvider = 'google' | 'github';

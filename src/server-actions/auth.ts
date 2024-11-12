@@ -6,8 +6,8 @@ import { AuthError } from 'next-auth';
 import { signIn, signOut } from '@/auth';
 import { hashPassword } from '@/lib/helpers';
 import prisma from '@/lib/prisma';
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
-import { TLogInData, TSignUpData } from '@/types/auth';
+import { DEFAULT_LOGIN_REDIRECT, DEFAULT_LOGOUT_REDIRECT } from '@/routes';
+import { TAuthProvider, TLogInData, TSignUpData } from '@/types/auth';
 
 export async function logIn(data: TLogInData) {
   try {
@@ -30,9 +30,30 @@ export async function logIn(data: TLogInData) {
   }
 }
 
+export async function socialLogIn(provider: TAuthProvider) {
+  try {
+    await signIn(provider, { callbackUrl: DEFAULT_LOGIN_REDIRECT });
+  } catch (error: any) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return { success: false, error: 'Invalid credentials!' };
+        default:
+          return { success: false, error: 'Authentication error' };
+      }
+    }
+
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
+    return { success: false, error: error.message || 'Server error' };
+  }
+}
+
 export async function logOut() {
   try {
-    await signOut();
+    await signOut({ redirectTo: DEFAULT_LOGOUT_REDIRECT });
   } catch (error: any) {
     if (isRedirectError(error)) {
       throw error;
