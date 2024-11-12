@@ -1,4 +1,7 @@
 import { compare, genSalt, hash } from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
+
+import prisma from '@/lib/prisma';
 
 // Helper function to generate the OpenAI prompt dynamically
 export const generatePrompt = ({
@@ -35,4 +38,19 @@ export const hashPassword = async (password: string) => {
 export const verifyPassword = async (plainPassword: string, hashedPassword: string) => {
   const isMatch = await compare(plainPassword, hashedPassword);
   return isMatch;
+};
+
+export const generateVerififcationToken = async (email: string) => {
+  const token = uuidv4();
+  const expiresAt = new Date(new Date().getTime() + 3600 * 1000);
+
+  const existingToken = await prisma.verificationToken.findFirst({ where: { email } });
+
+  if (existingToken) {
+    await prisma.verificationToken.delete({ where: { id: existingToken.id } });
+  }
+
+  const verificationToken = await prisma.verificationToken.create({ data: { email, expiresAt, token } });
+
+  return verificationToken;
 };
