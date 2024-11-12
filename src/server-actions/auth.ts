@@ -4,7 +4,8 @@ import { isRedirectError } from 'next/dist/client/components/redirect';
 import { AuthError } from 'next-auth';
 
 import { signIn, signOut } from '@/auth';
-import { hashPassword } from '@/lib/helpers';
+import { generateVerififcationToken, hashPassword } from '@/lib/helpers';
+import { sendEmail } from '@/lib/mail';
 import prisma from '@/lib/prisma';
 import { DEFAULT_LOGIN_REDIRECT, DEFAULT_LOGOUT_REDIRECT } from '@/routes';
 import { getUserByEmail } from '@/server-actions/user';
@@ -16,6 +17,9 @@ export async function logIn(data: TLogInData) {
     const { data: existingUser } = await getUserByEmail(email);
 
     if (!existingUser?.emailVerified) {
+      const { token } = await generateVerififcationToken(email);
+
+      await sendEmail(email, token);
       return { success: false, error: 'Email is not verified for this account! We have resent you the verification email.' };
     }
 
@@ -84,6 +88,10 @@ export async function signUp(data: TSignUpData) {
     const hashedPassword = await hashPassword(password);
 
     await prisma.user.create({ data: { email, name, password: hashedPassword } });
+
+    const { token } = await generateVerififcationToken(email);
+
+    await sendEmail(email, token);
 
     return { success: true };
   } catch (error: any) {
