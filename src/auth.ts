@@ -15,6 +15,12 @@ declare module 'next-auth' {
 }
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  pages: { error: '/error', signIn: '/login' },
+  events: {
+    async linkAccount({ user: { id } }) {
+      await prisma.user.update({ where: { id }, data: { emailVerified: new Date() } });
+    },
+  },
   callbacks: {
     async session({ session, token }) {
       if (session.user && token.sub) {
