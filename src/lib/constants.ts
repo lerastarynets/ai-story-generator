@@ -12,3 +12,5 @@ export const NAVBAR_PAGES = [
   { name: 'Generate', path: '/generate' },
   { name: 'My Stories', path: '/stories' },
 ];
+
+export const OAUTH_ERROR_ID = 'OAuthAccountNotLinked';

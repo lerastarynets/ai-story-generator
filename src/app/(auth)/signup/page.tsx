@@ -6,6 +6,7 @@ import { Box, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 
+import OAuthError from '@/components/OAuthError';
 import SocialMediaButtons from '@/components/SocialMediaButtons';
 import { signUpSchema } from '@/lib/formSchemas';
 import { toastError, toastSuccess } from '@/lib/toastUtils';
@@ -105,6 +106,8 @@ const SignupForm = () => {
             />
           )}
         />
+
+        <OAuthError />
 
         <SocialMediaButtons />
 

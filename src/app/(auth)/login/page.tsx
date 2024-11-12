@@ -6,6 +6,7 @@ import { Box, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 
+import OAuthError from '@/components/OAuthError';
 import SocialMediaButtons from '@/components/SocialMediaButtons';
 import { logInSchema } from '@/lib/formSchemas';
 import { toastError, toastSuccess } from '@/lib/toastUtils';
@@ -58,6 +59,7 @@ const Page = () => {
             />
           )}
         />
+
         <Controller
           name='password'
           control={control}
@@ -74,6 +76,9 @@ const Page = () => {
             />
           )}
         />
+
+        <OAuthError />
+
         <LoadingButton type='submit' loading={isSubmitting} variant='contained' color='secondary' disabled={!isValid}>
           Log In
         </LoadingButton>
