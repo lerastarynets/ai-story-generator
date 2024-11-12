@@ -7,10 +7,18 @@ import { signIn, signOut } from '@/auth';
 import { hashPassword } from '@/lib/helpers';
 import prisma from '@/lib/prisma';
 import { DEFAULT_LOGIN_REDIRECT, DEFAULT_LOGOUT_REDIRECT } from '@/routes';
+import { getUserByEmail } from '@/server-actions/user';
 import { TAuthProvider, TLogInData, TSignUpData } from '@/types/auth';
 
 export async function logIn(data: TLogInData) {
   try {
+    const { email } = data;
+    const { data: existingUser } = await getUserByEmail(email);
+
+    if (!existingUser?.emailVerified) {
+      return { success: false, error: 'Email is not verified for this account! We have resent you the verification email.' };
+    }
+
     await signIn('credentials', { ...data, redirectTo: DEFAULT_LOGIN_REDIRECT });
   } catch (error: any) {
     if (error instanceof AuthError) {
@@ -78,6 +86,16 @@ export async function signUp(data: TSignUpData) {
     await prisma.user.create({ data: { email, name, password: hashedPassword } });
 
     return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Server error' };
+  }
+}
+
+export async function getVerificationTokenByToken(token: string) {
+  try {
+    const verificationToken = await prisma.verificationToken.findUnique({ where: { token } });
+
+    return { success: true, data: verificationToken };
   } catch (error: any) {
     return { success: false, error: error.message || 'Server error' };
   }
