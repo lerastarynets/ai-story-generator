@@ -99,11 +99,38 @@ export async function signUp(data: TSignUpData) {
   }
 }
 
-export async function getVerificationTokenByToken(token: string) {
+export async function verifyEmail(token: string) {
   try {
     const verificationToken = await prisma.verificationToken.findUnique({ where: { token } });
 
-    return { success: true, data: verificationToken };
+    if (!verificationToken) {
+      return { success: false, error: 'Token does not exist' };
+    }
+
+    const hasExpired = new Date(verificationToken.expiresAt) < new Date();
+
+    if (hasExpired) {
+      return { success: false, error: 'Token has expired' };
+    }
+
+    const { data: user } = await getUserByEmail(verificationToken.email);
+
+    if (!user) {
+      return { success: false, error: 'Email does not exist' };
+    }
+
+    await prisma.$transaction(async (prisma) => {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date(), email: verificationToken.email },
+      });
+
+      await prisma.verificationToken.delete({
+        where: { id: verificationToken.id },
+      });
+    });
+
+    return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message || 'Server error' };
   }

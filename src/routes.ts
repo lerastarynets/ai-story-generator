@@ -6,4 +6,4 @@ export const DEFAULT_LOGIN_REDIRECT = '/generate';
 
 export const DEFAULT_LOGOUT_REDIRECT = '/login';
 
-export const PUBLIC_ROUTES = ['/'];
+export const PUBLIC_ROUTES = ['/', '/verification'];
