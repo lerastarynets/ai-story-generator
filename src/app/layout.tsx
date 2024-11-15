@@ -7,6 +7,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ToastContainer, ToastContainerProps } from 'react-toastify';
 
 import Navbar from '@/components/Navbar';
+import { SessionProvider } from '@/components/SessionProvider';
 import theme from '@/lib/theme';
 
 const defaultToastOptions: ToastContainerProps = {
@@ -27,14 +28,14 @@ export default function RootLayout({
       <body>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
-            <>
+            <SessionProvider>
               <CssBaseline />
               <ToastContainer {...defaultToastOptions} />
               <Navbar />
               <main className='flex flex-col items-center pt-24'>
                 <div className='max-w-[600px] px-4'>{children}</div>
               </main>
-            </>
+            </SessionProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

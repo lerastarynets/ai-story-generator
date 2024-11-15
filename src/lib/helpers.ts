@@ -1,4 +1,5 @@
 import { compare, genSalt, hash } from 'bcryptjs';
+import { Session } from 'next-auth';
 import { v4 as uuidv4 } from 'uuid';
 
 import prisma from '@/lib/prisma';
@@ -53,4 +54,10 @@ export const generateVerififcationToken = async (email: string) => {
   const verificationToken = await prisma.verificationToken.create({ data: { email, expiresAt, token } });
 
   return verificationToken;
+};
+
+export const getStatus = (loading: boolean, session: Session | null) => {
+  if (loading) return 'loading';
+  if (session) return 'authenticated';
+  return 'unauthenticated';
 };
