@@ -20,6 +20,7 @@ const SignupForm = () => {
     control,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
+    reset,
   } = useForm({
     mode: 'onChange',
     defaultValues,
@@ -28,13 +29,14 @@ const SignupForm = () => {
 
   const handleSignup = async (formData: TSignUpData) => {
     try {
-      await signUp(formData);
+      const response = await signUp(formData);
 
-      //   if (!response.success) {
-      //     return toastError(response.error);
-      //   }
+      if (!response.success) {
+        return toastError(response.error);
+      }
 
-      toastSuccess('Signup successful!');
+      reset();
+      toastSuccess('Verification email sent');
     } catch (error) {
       toastError(`An unexpected error occurred: ${error}`);
     }
