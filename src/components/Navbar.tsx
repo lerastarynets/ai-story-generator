@@ -16,11 +16,16 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { MouseEvent, useState } from 'react';
 
+import { useSession } from '@/hooks/useSession';
 import { NAVBAR_PAGES, NAVBAR_SETTINGS } from '@/lib/constants';
+import { toastError, toastSuccess } from '@/lib/toastUtils';
+import { logOut } from '@/server-actions/auth';
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const { data: session } = useSession();
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -35,6 +40,20 @@ const Navbar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogOut = async () => {
+    try {
+      const response = await logOut();
+
+      if (response?.error) {
+        return toastError(response.error);
+      }
+
+      toastSuccess('Logout successful!');
+    } catch (error) {
+      toastError(`An unexpected error occurred: ${error}`);
+    }
   };
 
   return (
@@ -52,42 +71,44 @@ const Navbar = () => {
             LOGO
           </Typography>
 
-          <Box className='xs:flex grow md:hidden'>
-            <IconButton
-              size='large'
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              onClick={handleOpenNavMenu}
-              color='inherit'
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id='menu-appbar'
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              className='xs:block grow md:hidden'
-            >
-              {NAVBAR_PAGES.map(({ name, path }) => (
-                <MenuItem key={name}>
-                  <Link className='text-black no-underline' href={path}>
-                    <Typography align='center'>{name}</Typography>
-                  </Link>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {session && (
+            <Box className='xs:flex grow md:hidden'>
+              <IconButton
+                size='large'
+                aria-label='account of current user'
+                aria-controls='menu-appbar'
+                aria-haspopup='true'
+                onClick={handleOpenNavMenu}
+                color='inherit'
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id='menu-appbar'
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                className='xs:block grow md:hidden'
+              >
+                {NAVBAR_PAGES.map(({ name, path }) => (
+                  <MenuItem key={name}>
+                    <Link className='text-black no-underline' href={path}>
+                      <Typography align='center'>{name}</Typography>
+                    </Link>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
           <AdbIcon className='xs:flex mr-2 md:hidden' />
           <Typography
             variant='h5'
@@ -98,42 +119,48 @@ const Navbar = () => {
           >
             LOGO
           </Typography>
-          <Box className='xs:hidden grow md:flex'>
-            {NAVBAR_PAGES.map(({ name, path }) => (
-              <Link className='no-underline' href={path} key={name}>
-                <Button className='my-4 block text-white'>{name}</Button>
-              </Link>
-            ))}
-          </Box>
-          <Box className='grow-0'>
-            <Tooltip title='Open settings'>
-              <IconButton onClick={handleOpenUserMenu} className='p-0'>
-                <Avatar alt='Remy Sharp' />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              className='mt-11'
-              id='menu-appbar'
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {NAVBAR_SETTINGS.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography align='center'>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {session && (
+            <>
+              <Box className='xs:hidden grow md:flex'>
+                {NAVBAR_PAGES.map(({ name, path }) => (
+                  <Link className='no-underline' href={path} key={name}>
+                    <Button className='my-4 block text-white'>{name}</Button>
+                  </Link>
+                ))}
+              </Box>
+              <Box className='grow-0'>
+                <Tooltip title='Open settings'>
+                  <IconButton onClick={handleOpenUserMenu} className='p-0'>
+                    <Avatar alt='Remy Sharp' />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  className='mt-11'
+                  id='menu-appbar'
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {NAVBAR_SETTINGS.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Typography onClick={handleLogOut} align='center'>
+                        {setting}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            </>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
