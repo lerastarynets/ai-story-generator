@@ -4,12 +4,12 @@ import { isRedirectError } from 'next/dist/client/components/redirect';
 import { AuthError } from 'next-auth';
 
 import { signIn, signOut } from '@/auth';
-import { generateVerififcationToken, hashPassword } from '@/lib/helpers';
-import { sendEmail } from '@/lib/mail';
+import { generateResetPasswordToken, generateVerififcationToken, hashPassword } from '@/lib/helpers';
+import { sendResetPasswordEmail, sendVerificationEmail } from '@/lib/mail';
 import prisma from '@/lib/prisma';
 import { DEFAULT_LOGIN_REDIRECT, DEFAULT_LOGOUT_REDIRECT } from '@/routes';
 import { getUserByEmail } from '@/server-actions/user';
-import { TAuthProvider, TLogInData, TSignUpData } from '@/types/auth';
+import { TAuthProvider, TForgotPasswordData, TLogInData, TSignUpData } from '@/types/auth';
 
 export async function logIn(data: TLogInData) {
   try {
@@ -19,7 +19,7 @@ export async function logIn(data: TLogInData) {
     if (!existingUser?.emailVerified) {
       const { token } = await generateVerififcationToken(email);
 
-      await sendEmail(email, token);
+      await sendVerificationEmail(email, token);
       return { success: false, error: 'Email is not verified for this account! We have resent you the verification email.' };
     }
 
@@ -79,7 +79,7 @@ export async function signUp(data: TSignUpData) {
   try {
     const { password, email, name } = data;
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const { data: existingUser } = await getUserByEmail(email);
 
     if (existingUser) {
       return { success: false, error: 'Email is already in use' };
@@ -91,7 +91,7 @@ export async function signUp(data: TSignUpData) {
 
     const { token } = await generateVerififcationToken(email);
 
-    await sendEmail(email, token);
+    await sendVerificationEmail(email, token);
 
     return { success: true };
   } catch (error: any) {
@@ -129,6 +129,36 @@ export async function verifyEmail(token: string) {
         where: { id: verificationToken.id },
       });
     });
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Server error' };
+  }
+}
+
+export async function sendResetInstructions(data: TForgotPasswordData) {
+  try {
+    const { email } = data;
+
+    const { data: existingUser } = await getUserByEmail(email);
+
+    if (!existingUser) {
+      return { success: false, error: 'Email is not registered in the system' };
+    }
+
+    if (!existingUser.emailVerified) {
+      const { token } = await generateVerififcationToken(email);
+      await sendVerificationEmail(email, token);
+
+      return {
+        success: false,
+        error: 'The email is not yet verified. We have resent you the verification email. Please, verify the email first.',
+      };
+    }
+
+    const { token } = await generateResetPasswordToken(email);
+
+    await sendResetPasswordEmail(email, token);
 
     return { success: true };
   } catch (error: any) {

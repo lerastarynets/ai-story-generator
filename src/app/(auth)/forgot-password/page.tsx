@@ -3,17 +3,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, TextField, Typography } from '@mui/material';
-import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 
-import OAuthError from '@/components/OAuthError';
-import SocialMediaButtons from '@/components/SocialMediaButtons';
-import { logInSchema } from '@/lib/formSchemas';
+import { forgotPasswordSchema } from '@/lib/formSchemas';
 import { toastError, toastSuccess } from '@/lib/toastUtils';
-import { logIn } from '@/server-actions/auth';
-import { TLogInData } from '@/types/auth';
+import { logIn, sendResetInstructions } from '@/server-actions/auth';
+import { TForgotPasswordData } from '@/types/auth';
 
-const defaultValues = { email: '', password: '' };
+const defaultValues = { email: '' };
 
 const Page = () => {
   const {
@@ -23,18 +20,18 @@ const Page = () => {
   } = useForm({
     mode: 'onChange',
     defaultValues,
-    resolver: yupResolver(logInSchema),
+    resolver: yupResolver(forgotPasswordSchema),
   });
 
-  const handleLogin = async (formData: TLogInData) => {
+  const handleLogin = async (formData: TForgotPasswordData) => {
     try {
-      const response = await logIn(formData);
+      const response = await sendResetInstructions(formData);
 
       if (response?.error) {
         return toastError(response.error);
       }
 
-      toastSuccess('Login successful!');
+      toastSuccess('Instructions sent!');
     } catch (error) {
       toastError(`An unexpected error occurred: ${error}`);
     }
@@ -42,7 +39,8 @@ const Page = () => {
 
   return (
     <Box className='w-[300px] space-y-3'>
-      <Typography variant='h5'>Log In</Typography>
+      <Typography variant='h5'>Forgot your password?</Typography>
+      <Typography variant='body2'>Please enter your email so we can send you reset instructions</Typography>
       <form className='flex flex-col space-y-2' onSubmit={handleSubmit(handleLogin)}>
         <Controller
           name='email'
@@ -60,39 +58,10 @@ const Page = () => {
           )}
         />
 
-        <Controller
-          name='password'
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              type='password'
-              label='Password'
-              variant='outlined'
-              color='secondary'
-              fullWidth
-              error={!!errors.password}
-              helperText={errors.password?.message}
-            />
-          )}
-        />
-
-        <OAuthError />
-
         <LoadingButton type='submit' loading={isSubmitting} variant='contained' color='secondary' disabled={!isValid}>
-          Log In
+          Send reset instructions
         </LoadingButton>
       </form>
-
-      <SocialMediaButtons />
-
-      <Typography variant='body2' component={Link} href='/forgot-password'>
-        Forgot your password?
-      </Typography>
-
-      <Typography variant='body2'>
-        Don’t have an account? <Link href='/signup'>Sign up</Link>
-      </Typography>
     </Box>
   );
 };

@@ -31,6 +31,20 @@ export const logInSchema = yup.object({
   password: passwordSchema,
 });
 
+export const forgotPasswordSchema = yup.object({
+  email: yup.string().email('Ivalid email format').required('Email is required'),
+});
+
+export const resetPasswordSchema = yup.object({
+  password: passwordSchema,
+  confirmPassword: yup
+    .string()
+    .test('passwords-match', 'Passwords are not equal.', function testMatch(value) {
+      return this.parent.password === value;
+    })
+    .required('Please confirm your password.'),
+});
+
 export const signUpSchema = yup.object({
   email: yup.string().email('Ivalid email format').required('Email is required'),
   name: yup
