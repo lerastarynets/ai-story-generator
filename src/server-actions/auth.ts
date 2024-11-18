@@ -4,12 +4,12 @@ import { isRedirectError } from 'next/dist/client/components/redirect';
 import { AuthError } from 'next-auth';
 
 import { signIn, signOut } from '@/auth';
-import { generateResetPasswordToken, generateVerififcationToken, hashPassword } from '@/lib/helpers';
+import { generateResetPasswordToken, generateVerififcationToken, hashPassword, verifyPassword } from '@/lib/helpers';
 import { sendResetPasswordEmail, sendVerificationEmail } from '@/lib/mail';
 import prisma from '@/lib/prisma';
 import { DEFAULT_LOGIN_REDIRECT, DEFAULT_LOGOUT_REDIRECT } from '@/routes';
 import { getUserByEmail } from '@/server-actions/user';
-import { TAuthProvider, TForgotPasswordData, TLogInData, TSignUpData } from '@/types/auth';
+import { TAuthProvider, TForgotPasswordData, TLogInData, TResetPasswordData, TSignUpData } from '@/types/auth';
 
 export async function logIn(data: TLogInData) {
   try {
@@ -159,6 +159,56 @@ export async function sendResetInstructions(data: TForgotPasswordData) {
     const { token } = await generateResetPasswordToken(email);
 
     await sendResetPasswordEmail(email, token);
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Server error' };
+  }
+}
+
+export async function resetPassword(data: TResetPasswordData, token: string | null) {
+  try {
+    const { password } = data;
+
+    if (!token) {
+      return { success: false, error: 'Missing token' };
+    }
+    const resetPasswordToken = await prisma.resetPasswordToken.findUnique({ where: { token } });
+
+    if (!resetPasswordToken) {
+      return { success: false, error: 'Token does not exist' };
+    }
+
+    const hasExpired = new Date(resetPasswordToken.expiresAt) < new Date();
+
+    if (hasExpired) {
+      return { success: false, error: 'Token has expired' };
+    }
+
+    const { data: user } = await getUserByEmail(resetPasswordToken.email);
+
+    if (!user || !user.password) {
+      return { success: false, error: 'Email does not exist' };
+    }
+
+    const isEqualPassword = await verifyPassword(password, user.password);
+
+    if (isEqualPassword) {
+      return { success: false, error: 'Do not use your previous password' };
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    await prisma.$transaction(async (prisma) => {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { password: hashedPassword },
+      });
+
+      await prisma.resetPasswordToken.delete({
+        where: { id: resetPasswordToken.id },
+      });
+    });
 
     return { success: true };
   } catch (error: any) {

@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { forgotPasswordSchema } from '@/lib/formSchemas';
 import { toastError, toastSuccess } from '@/lib/toastUtils';
-import { logIn, sendResetInstructions } from '@/server-actions/auth';
+import { sendResetInstructions } from '@/server-actions/auth';
 import { TForgotPasswordData } from '@/types/auth';
 
 const defaultValues = { email: '' };
@@ -23,7 +23,7 @@ const Page = () => {
     resolver: yupResolver(forgotPasswordSchema),
   });
 
-  const handleLogin = async (formData: TForgotPasswordData) => {
+  const handleSendInstructions = async (formData: TForgotPasswordData) => {
     try {
       const response = await sendResetInstructions(formData);
 
@@ -41,7 +41,7 @@ const Page = () => {
     <Box className='w-[300px] space-y-3'>
       <Typography variant='h5'>Forgot your password?</Typography>
       <Typography variant='body2'>Please enter your email so we can send you reset instructions</Typography>
-      <form className='flex flex-col space-y-2' onSubmit={handleSubmit(handleLogin)}>
+      <form className='flex flex-col space-y-2' onSubmit={handleSubmit(handleSendInstructions)}>
         <Controller
           name='email'
           control={control}
