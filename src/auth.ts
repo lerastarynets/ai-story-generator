@@ -27,7 +27,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (user.id) {
         const { data: existingUser } = await getUserById(user.id);
+
         if (!existingUser?.emailVerified) return false;
+
+        if (existingUser?.is2FAEnabled) {
+          const twoFactorConfirmation = await prisma.twoFactorConfirmation.findUnique({ where: { userId: existingUser.id } });
+
+          if (!twoFactorConfirmation) return false;
+
+          await prisma.twoFactorConfirmation.delete({ where: { id: twoFactorConfirmation.id } });
+        }
       }
 
       return true;

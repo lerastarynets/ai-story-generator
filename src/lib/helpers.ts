@@ -1,4 +1,5 @@
 import { compare, genSalt, hash } from 'bcryptjs';
+import crypto from 'crypto';
 import { Session } from 'next-auth';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -69,6 +70,21 @@ export const generateResetPasswordToken = async (email: string) => {
   const resetPasswordToken = await prisma.resetPasswordToken.create({ data: { email, expiresAt, token } });
 
   return resetPasswordToken;
+};
+
+export const generate2FAToken = async (email: string) => {
+  const token = crypto.randomInt(100_000, 1_000_000).toString();
+  const expiresAt = new Date(new Date().getTime() + 5 * 60 * 1000);
+
+  const existingToken = await prisma.twoFactorToken.findFirst({ where: { email } });
+
+  if (existingToken) {
+    await prisma.twoFactorToken.delete({ where: { id: existingToken.id } });
+  }
+
+  const twoFactorToken = await prisma.twoFactorToken.create({ data: { email, expiresAt, token } });
+
+  return twoFactorToken;
 };
 
 export const getStatus = (loading: boolean, session: Session | null) => {

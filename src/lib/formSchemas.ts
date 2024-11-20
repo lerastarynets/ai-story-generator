@@ -29,6 +29,7 @@ export const saveStorySchema = yup.object({
 export const logInSchema = yup.object({
   email: yup.string().email('Ivalid email format').required('Email is required'),
   password: passwordSchema,
+  twoFactorCode: yup.string().matches(/^\d{6}$/, 'The code must be exactly 6 digits'),
 });
 
 export const forgotPasswordSchema = yup.object({
@@ -58,4 +59,8 @@ export const signUpSchema = yup.object({
       return this.parent.password === value;
     })
     .required('Please confirm your password'),
+});
+
+export const settingsSchema = yup.object({
+  is2FAEnabled: yup.boolean(),
 });
