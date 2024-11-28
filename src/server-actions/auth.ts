@@ -67,7 +67,7 @@ export async function logIn(data: TLogInData) {
       }
     }
 
-    await signIn('credentials', { ...data, redirectTo: DEFAULT_LOGIN_REDIRECT });
+    await signIn('credentials', { ...data });
   } catch (error: any) {
     if (error instanceof AuthError) {
       switch (error.type) {
