@@ -6,7 +6,7 @@ const nextConfig = {
         OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "",
         RESEND_API_KEY: process.env.RESEND_API_KEY ?? "",
         AUTH_SECRET: process.env.AUTH_SECRET ?? "",
-        NEXTAUTH_URL: process.env.NEXTAUTH_URL ?? "",
+        AUTH_URL: process.env.AUTH_URL ?? "",
     },
     reactStrictMode: false,
 };
