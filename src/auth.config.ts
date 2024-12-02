@@ -8,6 +8,7 @@ import { verifyPassword } from '@/lib/helpers';
 import { getUserByEmail } from '@/server-actions/user';
 
 export default {
+  trustHost: true,
   providers: [
     Github({ clientId: process.env.AUTH_GITHUB_ID, clientSecret: process.env.AUTH_GITHUB_SECRET }),
     Google({ clientId: process.env.AUTH_GOOGLE_ID, clientSecret: process.env.AUTH_GOOGLE_SECRET }),
