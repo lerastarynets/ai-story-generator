@@ -12,7 +12,7 @@ export default auth((req) => {
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
 
-  const isLoggedIn = !!auth;
+  const isLoggedIn = !!auth?.user;
 
   if (isApiAuthPrefix) {
     return;
