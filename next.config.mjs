@@ -7,6 +7,10 @@ const nextConfig = {
         RESEND_API_KEY: process.env.RESEND_API_KEY ?? "",
         AUTH_SECRET: process.env.AUTH_SECRET ?? "",
         AUTH_URL: process.env.AUTH_URL ?? "",
+        AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID ?? "",
+        AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET ?? "",
+        AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID ?? "",
+        AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET ?? "",
     },
     reactStrictMode: false,
 };
