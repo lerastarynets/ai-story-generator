@@ -18,8 +18,8 @@ export default auth((req) => {
     return;
   }
 
-  console.log('Headers:', req.headers);
-  console.log(auth, req.cookies, isAuthRoute, isPublicRoute, nextUrl);
+  console.log('Headers:', JSON.stringify(req.headers));
+  console.log(auth, JSON.stringify(req.cookies), isAuthRoute, isPublicRoute, nextUrl);
   if (isAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
