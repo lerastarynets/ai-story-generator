@@ -11,6 +11,7 @@ const nextConfig = {
         AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET ?? "",
         AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID ?? "",
         AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET ?? "",
+        AUTH_TRUST_HOST: process.env.AUTH_TRUST_HOST ?? "",
     },
     reactStrictMode: false,
 };

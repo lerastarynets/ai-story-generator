@@ -18,6 +18,7 @@ export default auth((req) => {
     return;
   }
 
+  console.log('Headers:', req.headers);
   console.log(auth, req.cookies, isAuthRoute, isPublicRoute, nextUrl);
   if (isAuthRoute) {
     if (isLoggedIn) {
